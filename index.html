@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>aditya yadav</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="description" content="aditya's website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque&display=swap" rel="stylesheet">
+  <script src="lanyard.js"></script>
+  <style>
+    body {
+      background-color: #1D1F21;
+      color: #f0f8ff;
+      font-family: 'Bricolage Grotesque', sans-serif;
+    }
+
+    a:link {
+      color: #6BFFCC;
+      background-color: transparent;
+      text-decoration: none;
+    }
+
+    a:visited {
+      color: #D480AA;
+      background-color: transparent;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #BF99B1;
+      background-color: transparent;
+      text-decoration: underline;
+      text-decoration-style: wavy;
+    }
+
+    .name {
+      color: #D480AA;
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-style: dashed;
+    }
+
+    .online {
+      color: lightgreen;
+    }
+
+    .offline {
+      color: grey;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>hello, i am <span class="name">aditya yadav</span></h1>
+  <h2>i love computers, animes & books (maybe)</h2>
+  <h3>let's connect on socials</h3>
+  <ul>
+    <li><a href="https://x.com/immsaiddtweets">x (formerly twitter)</a></li>
+    <li><a href="https://instagram.com/immasidd">instagram</a></li>
+    <li><a href="https://linkedin.com/in/immasidd/">linkedin</a></li>
+    <li><a href="https://discord.com/users/709347765343486084">discord </a>
+      <i>(<span id="status" class="offline">offline</span>)</i>
+    </li>
+    <li><a href="https://open.spotify.com/user/qyb2ql3ss8y1rskblvqd00ab1">spotify </a>
+      <i>(<span id="spotify" class="offline">playing nothing</span>)</i>
+    </li>
+  </ul>
+  <script>
+    let status = document.getElementById("status");
+    let spotify = document.getElementById("spotify");
+    let fetchDiscordStatus = async (success, data) => {
+      if (success) {
+        if (data.active_on_discord_web || data.active_on_discord_desktop || data.active_on_discord_mobile) {
+          status.innerText = 'online';
+          status.className = '';
+          status.classList.add('online');
+        } else {
+          status.innerText = 'offline';
+          status.className = '';
+          status.classList.add('offline');
+        }
+        if (data.listening_to_spotify != false) {
+          spotify.innerHTML = `playing - <a href="https://open.spotify.com/track/${data.spotify.track_id}">${data.spotify.song.toLowerCase()}</a>`
+          spotify.className = '';
+          spotify.classList.add('online');
+        } else {
+          spotify.innerHTML = 'playing nothing';
+          spotify.className = '';
+          spotify.classList.add('offline');
+        }
+      }
+    }
+    function updateStatus(data){
+      if(Object.keys(data).length === 0){
+        console.log("Error fetching status")
+      } else {
+        fetchDiscordStatus(true, data)
+      }
+    }
+    lanyard({
+        userId: "709347765343486084",
+        socket: true,
+        onPresenceUpdate: updateStatus
+    })
+  </script>
+</body>
+
+</html>
